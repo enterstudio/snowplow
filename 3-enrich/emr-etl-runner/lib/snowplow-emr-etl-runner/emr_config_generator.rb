@@ -31,8 +31,8 @@ module Snowplow
         get_schema_name("ClusterConfig", "avro", version)
       end
 
-      Contract ConfigHash, Bool, ArrayOf[String], String, ArrayOf[String] => Hash
-      def create_datum(config, debug=false, skip=[], resolver='', enrichments=[])
+      Contract ConfigHash, Bool, Maybe[String], String, ArrayOf[String] => Hash
+      def create_datum(config, debug=false, resume_from=nil, resolver='', enrichments=[])
         legacy = (not (config[:aws][:emr][:ami_version] =~ /^[1-3].*/).nil?)
         region = config[:aws][:emr][:region]
 

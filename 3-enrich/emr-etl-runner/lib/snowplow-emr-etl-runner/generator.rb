@@ -28,11 +28,11 @@ module Snowplow
 
       # Print out the Avro record given by create_record to a file using the schema provided by
       # get_schema
-      Contract ConfigHash, String, String, Bool, ArrayOf[String], String, ArrayOf[String] => nil
-      def generate(config, version, filename, debug=false, skip=[], resolver='', enrichments=[])
+      Contract ConfigHash, String, String, Bool, Maybe[String], String, ArrayOf[String] => nil
+      def generate(config, version, filename, debug=false, resume_from=nil, resolver='', enrichments=[])
         raw_schema = get_schema(version)
         avro_schema = Avro::Schema.parse(raw_schema)
-        datum = create_datum(config, debug, skip, resolver, enrichments)
+        datum = create_datum(config, debug, resume_from, resolver, enrichments)
         if Avro::Schema.validate(avro_schema, datum)
           json = {
             "schema" => "iglu:" + get_schema_name_from_version(version),
@@ -68,8 +68,8 @@ module Snowplow
       end
 
       # Create a valid Avro datum
-      Contract ConfigHash, Bool, ArrayOf[String], String, ArrayOf[String] => Hash
-      def create_datum(config, debug=false, skip=[], resolver='', enrichments=[])
+      Contract ConfigHash, Bool, Maybe[String], String, ArrayOf[String] => Hash
+      def create_datum(config, debug=false, resume_from=nil, resolver='', enrichments=[])
         raise RuntimeError, '#create_datum needs to be defined in all generators.'
       end
 
