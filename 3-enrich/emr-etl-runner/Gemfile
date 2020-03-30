@@ -27,7 +27,7 @@ gem "snowplow-tracker", "~> 0.5.2"
 
 group :development do
   gem "rspec", "~> 2.14", ">= 2.14.1"
-  gem "coveralls"
+  gem "coveralls", ">= 0.8.15"
   
   gem "warbler" if RUBY_PLATFORM == 'java'
 end
